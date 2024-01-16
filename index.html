@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Circle Movement</title>
+    <style>
+        #Circle {
+            position: fixed;
+            width: 100px;
+            height: 100px;
+            background-color: aqua;
+            border-radius: 50%;
+        }
+
+        #Circle2 {
+            position: fixed;
+            width: 100px;
+            height: 100px;
+            background-color: red;
+            border-radius: 50%;
+        }
+
+        #Circle3 {
+            position: fixed;
+            width: 100px;
+            height: 100px;
+            background-color: chartreuse;
+            border-radius: 50%;
+        }
+
+        body {
+            background-color: black;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div id="Circle"></div>
+    <div id="Circle2"></div>
+    <div id="Circle3"></div>
+
+    <script>
+        const CircleChannel = new BroadcastChannel("circle_channel")
+        const circle = document.getElementById("Circle")
+        const circle2 = document.getElementById("Circle2")
+        const circle3 = document.getElementById("Circle3")
+
+        function circleMovement(event) {
+            const x = event.clientX,
+                y = event.clientY
+            circle.style.left = x + "px";
+            circle.style.right = "";
+            circle.style.top = y + "px";
+
+            circle2.style.left = x + 20 + "px";
+            circle2.style.right = "";
+            circle2.style.top = y + "px";
+
+            circle3.style.left = x + 50 + "px";
+            circle3.style.right = "";
+            circle3.style.top = y + "px";
+            CircleChannel.postMessage({
+                x,
+                y
+            })
+            CircleChannel.onmessage = (event) => {
+                const {
+                    x,
+                    y
+                } = event.data
+                circle.style.right = x + "px";
+                circle.style.left = "";
+                circle.style.top = y + "px";
+
+                circle2.style.right = x + 20 + "px";
+                circle2.style.left = "";
+                circle2.style.top = y + "px";
+
+                circle3.style.right = x + 50 + "px";
+                circle3.style.left = "";
+                circle3.style.top = y + "px";
+            }
+        }
+        addEventListener("mousemove", circleMovement)
+    </script>
+</body>
+
+</html>
